@@ -1,1 +1,2 @@
-# Task_Manager
+# Hardware_Sim
+This C++ proyect
