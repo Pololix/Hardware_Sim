@@ -1,8 +1,6 @@
-add_library(debug_utils STATIC
-	include/debug_utils/logger.h
-)
+add_library(debug_utils INTERFACE)
 
 target_include_directories(debug_utils
-	PUBLIC
+	INTERFACE
 		include
 )

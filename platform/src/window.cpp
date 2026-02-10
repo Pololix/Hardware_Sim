@@ -4,12 +4,25 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-namespace platform {
-Window::Window(int width, int height, const char* name) 
+#include "debug_utils/logger.h"
+
+namespace platform 
 {
-	if (!glfwInit()) {
-		std::cout << "couldnt init glfw\n";
-		return;
+Window::Window(int width, int height, const char* name)
+{
+	Window(width, height, name, false);
+}
+Window::Window(int width, int height, const char* name, bool fullscreen) 
+{
+	debug_utils::Logger& platformLogger = debug_utils::getLogger("platform");
+
+	if (!m_hasInitGLFW) {
+		if (!glfwInit())
+		{
+			platformLogger.log(debug_utils::LogLevel::ERROR, []() { return "Unable to init GLFW"; });
+			return;
+		}
+		m_hasInitGLFW = true;
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -17,19 +30,23 @@ Window::Window(int width, int height, const char* name)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); for macOS
 
-	m_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
+	m_window = glfwCreateWindow(width, height, name, fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 	if (!m_window) {
-		std::cout << "couldnt create a glfw window\n";
+		platformLogger.log(debug_utils::LogLevel::ERROR, []() { return "Unable to create GLFW window"; });
 		glfwTerminate();
 		return;
 	}
 
 	glfwMakeContextCurrent(m_window);
 	
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cerr << "couldnt init glad\n";
-		return;
-	}
+	if (!m_hasInitGLAD)
+	{
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+			platformLogger.log(debug_utils::LogLevel::ERROR, []() { return "Unable to init GLAD"; });
+			return;
+		}
+		m_hasInitGLAD = true;
+	}		
 }
 
 Window::~Window() 
