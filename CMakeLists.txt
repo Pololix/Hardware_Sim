@@ -9,17 +9,22 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(APP src/main.cpp)
-
 # engine modules
-add_subdirectory(platform)
 add_subdirectory(core)
+add_subdirectory(debug_utils)
+add_subdirectory(graphics)
+add_subdirectory(platform)
 
 # third party
 add_subdirectory(third_party)
 
+# app
+add_executable(APP src/main.cpp)
+
 target_link_libraries(APP
     PRIVATE
-        platform
         core
+        debug_utils
+        graphics
+        platform
 )
