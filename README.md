@@ -6,5 +6,5 @@ From transistors and logic gates to compilers and your own programs.
 This is a side projects that links two of my hobbies: programming and electronics. 
 I'm still learning about both and I will be updating the project as I do so.
 
-# Features
-	- 
+# Important
+This project is on halt. I wil first develop Pololib and then get back to this project using the prior as a submodule
